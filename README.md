@@ -15,5 +15,5 @@
         DB_URI=root:root@/DB
         VOLUME_PATH=/Users/<username>/Workspace/mysql
     ```
-3. Run ```docker-compose up``` to start an mysql instance
+3. Run ```docker-compose up``` to start a mysql instance
 4. ```go run main.go```
