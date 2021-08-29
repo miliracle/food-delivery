@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fooddelivery/component"
 	"fooddelivery/module/restaurant/restauranttransport/ginrestaurent"
 	"log"
 	"net/http"
@@ -25,6 +26,8 @@ func main() {
 }
 
 func runService(db *gorm.DB) error {
+	appCtx := component.NewAppContext(db)
+
 	r := gin.Default()
 
 	r.GET("/ping", func(c *gin.Context) {
@@ -35,7 +38,7 @@ func runService(db *gorm.DB) error {
 
 	restaurants := r.Group("/restaurants")
 	{
-		restaurants.POST("", ginrestaurent.CreateRestaurant(db))
+		restaurants.POST("", ginrestaurent.CreateRestaurant(appCtx))
 	}
 
 	return r.Run()
