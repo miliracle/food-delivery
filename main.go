@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fooddelivery/module/restaurant/restauranttransport/ginrestaurent"
 	"log"
 	"net/http"
 
@@ -31,6 +32,11 @@ func runService(db *gorm.DB) error {
 			"message": "pong",
 		})
 	})
+
+	restaurants := r.Group("/restaurants")
+	{
+		restaurants.POST("", ginrestaurent.CreateRestaurant(db))
+	}
 
 	return r.Run()
 }
