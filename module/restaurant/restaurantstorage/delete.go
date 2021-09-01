@@ -2,6 +2,7 @@ package restaurantstorage
 
 import (
 	"context"
+	"fooddelivery/common"
 	"fooddelivery/module/restaurant/restaurantmodel"
 )
 
@@ -11,7 +12,7 @@ func (s *sqlStore) SoftDeleteData(ctx context.Context, id int) error {
 	if err := db.Table(restaurantmodel.Restaurant{}.TableName()).Where("id = ?", id).Updates(map[string]interface{}{
 		"status": 0,
 	}).Error; err != nil {
-		return err
+		return common.ErrDB(err)
 	}
 
 	return nil
