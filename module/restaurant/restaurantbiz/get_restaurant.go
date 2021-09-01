@@ -34,7 +34,7 @@ func (biz *getRestaurantBiz) GetRestaurant(ctx context.Context, id int) (*restau
 	}
 
 	if data.Status == 0 {
-		return nil, common.ErrCannotDeleteEntity(restaurantmodel.EntityName, err)
+		return nil, common.ErrCannotGetEntity(restaurantmodel.EntityName, err)
 	}
 
 	return data, err
