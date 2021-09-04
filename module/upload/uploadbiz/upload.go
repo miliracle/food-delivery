@@ -42,8 +42,9 @@ func (biz *uploadBiz) UploadImage(ctx context.Context, srcData io.Reader, folder
 
 	fileExt := filepath.Ext(filename)
 	subFolderName := fmt.Sprintf("%d", time.Now().Nanosecond())
+	destination := fmt.Sprintf("%s/%s/%s", folder, subFolderName, filename)
 
-	img, err := biz.provider.SaveUploadedFile(ctx, srcData, fmt.Sprintf("%s/%s/%s", folder, subFolderName, filename))
+	img, err := biz.provider.SaveUploadedFile(ctx, srcData, destination)
 
 	img.Width = width
 	img.Height = height

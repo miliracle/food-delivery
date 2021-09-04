@@ -37,9 +37,9 @@ func NewGCPCloudStorageProvider(bucketName string, credentialFilePath string) (*
 	return provider, nil
 }
 
-func (provider *GCPCloudStorageProvider) SaveUploadedFile(ctx context.Context, srcData io.Reader, fileName string) (*common.Image, error) {
+func (provider *GCPCloudStorageProvider) SaveUploadedFile(ctx context.Context, srcData io.Reader, destination string) (*common.Image, error) {
 
-	writer := provider.StorageClient.Bucket(provider.BucketName).Object(fileName).NewWriter(ctx)
+	writer := provider.StorageClient.Bucket(provider.BucketName).Object(destination).NewWriter(ctx)
 
 	if _, err := io.Copy(writer, srcData); err != nil {
 		return nil, err
