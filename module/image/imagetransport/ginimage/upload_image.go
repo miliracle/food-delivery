@@ -1,11 +1,11 @@
-package ginupload
+package ginimage
 
 import (
 	"fmt"
 	"fooddelivery/common"
 	"fooddelivery/component"
-	"fooddelivery/module/upload/uploadbiz"
-	"fooddelivery/module/upload/uploadstorage"
+	"fooddelivery/module/image/imagebiz"
+	"fooddelivery/module/image/imagestorage"
 	"io"
 	"net/http"
 
@@ -34,8 +34,8 @@ func UploadImage(appCtx component.AppContext) func(*gin.Context) {
 			if part.FormName() == "file" {
 				db := appCtx.GetMainDBConnection()
 				uploadProvider := appCtx.UploadProvider()
-				imgStore := uploadstorage.NewSQLStore(db)
-				biz := uploadbiz.NewUploadBiz(uploadProvider, imgStore)
+				imgStore := imagestorage.NewSQLStore(db)
+				biz := imagebiz.NewUploadBiz(uploadProvider, imgStore)
 
 				fmt.Print(part.Header)
 

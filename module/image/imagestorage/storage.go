@@ -1,4 +1,4 @@
-package uploadstorage
+package imagestorage
 
 import "gorm.io/gorm"
 

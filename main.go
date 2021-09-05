@@ -5,8 +5,8 @@ import (
 	"fooddelivery/component"
 	"fooddelivery/component/uploadprovider"
 	"fooddelivery/middleware"
+	"fooddelivery/module/image/imagetransport/ginimage"
 	"fooddelivery/module/restaurant/restauranttransport/ginrestaurent"
-	"fooddelivery/module/upload/uploadtransport/ginupload"
 	"log"
 	"net/http"
 
@@ -52,7 +52,9 @@ func runService(db *gorm.DB, uploadProvider uploadprovider.UploadProvider) error
 
 	images := r.Group("/images")
 	{
-		images.POST("/upload", ginupload.UploadImage(appCtx))
+		images.GET("", ginimage.ListImage(appCtx))
+		images.POST("", ginimage.UploadImage(appCtx))
+		images.DELETE("/:id", ginimage.DeleteImage(appCtx))
 	}
 
 	restaurants := r.Group("/restaurants")

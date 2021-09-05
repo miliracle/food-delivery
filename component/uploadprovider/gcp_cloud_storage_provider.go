@@ -59,5 +59,14 @@ func (provider *GCPCloudStorageProvider) SaveUploadedFile(ctx context.Context, s
 	}
 
 	return &img, nil
+}
 
+func (provider *GCPCloudStorageProvider) DeleteUploadedFile(ctx context.Context, destination string) error {
+	object := provider.StorageClient.Bucket(provider.BucketName).Object(destination)
+
+	if err := object.Delete(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }

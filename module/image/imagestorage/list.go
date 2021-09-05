@@ -1,4 +1,4 @@
-package uploadstorage
+package imagestorage
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 func (s *sqlStore) ListImages(
 	ctx context.Context,
-	ids []int,
+	ids *[]int,
 	moreKeys ...string,
 ) (common.Images, error) {
 	db := s.db
@@ -16,7 +16,7 @@ func (s *sqlStore) ListImages(
 
 	db = db.Table(common.Images{}.TableName())
 
-	if err := db.Where("id in (?)", ids).Find(&result).Error; err != nil {
+	if err := db.Where("id in (?)", &ids).Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

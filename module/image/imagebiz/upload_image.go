@@ -1,4 +1,4 @@
-package uploadbiz
+package imagebiz
 
 import (
 	"context"
@@ -56,6 +56,13 @@ func (biz *uploadBiz) UploadImage(ctx context.Context, srcData io.Reader, folder
 	}
 
 	if err := biz.imgStore.CreateImage(ctx, img); err != nil {
+
+		errDelete := biz.provider.DeleteUploadedFile(ctx, destination)
+
+		if errDelete != nil {
+			log.Fatalln("Failed to delete image", destination)
+		}
+
 		return nil, common.ErrCannotCreateEntity(img.TableName(), err)
 	}
 
