@@ -8,15 +8,18 @@ import (
 )
 
 type Image struct {
-	Id        int    `json:"id" gorm:"column:id;"`
+	Id        int    `json:"id,omitempty" gorm:"column:id;"`
 	Url       string `json:"url" gorm:"column:url;"`
 	Width     int    `json:"width" gorm:"column:width;"`
 	Height    int    `json:"height" gorm:"column:height;"`
 	CloudName string `json:"cloud_name,omitempty" gorm:"-"`
-	Extension string `json:"extension" gorm:"-"`
+	Extension string `json:"extension,omitempty" gorm:"-"`
 }
 
-func (Image) TableName() string { return "images" }
+type Images []Image
+
+func (Image) TableName() string  { return "images" }
+func (Images) TableName() string { return "images" }
 
 func (j *Image) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
@@ -41,8 +44,6 @@ func (j *Image) Value() (driver.Value, error) {
 	}
 	return json.Marshal(j)
 }
-
-type Images []Image
 
 func (j *Images) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)

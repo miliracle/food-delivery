@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fooddelivery/common"
 	"fooddelivery/component"
+	"fooddelivery/component/uploadprovider"
 	"fooddelivery/middleware"
+	"fooddelivery/module/image/imagetransport/ginimage"
 	"fooddelivery/module/restaurant/restauranttransport/ginrestaurent"
 	"log"
 	"net/http"
@@ -14,20 +17,29 @@ import (
 )
 
 func main() {
-	dbConStr := viperEnvVariable("DB_URI")
+	dbConStr := common.CONFIG.DB_URI
 	db, err := gorm.Open(mysql.Open(dbConStr), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if err := runService(db); err != nil {
+	GCPCentificateFilePath := viperEnvVariable("GOOGLE_APPLICATION_CREDENTIALS")
+	CloudStorageBucketName := viperEnvVariable("GOOGLE_CLOUD_STORAGE_BUCKET_NAME")
+
+	uploadProvider, err := uploadprovider.NewGCPCloudStorageProvider(CloudStorageBucketName, GCPCentificateFilePath)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if err := runService(db, uploadProvider); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func runService(db *gorm.DB) error {
-	appCtx := component.NewAppContext(db)
+func runService(db *gorm.DB, uploadProvider uploadprovider.UploadProvider) error {
+	appCtx := component.NewAppContext(db, uploadProvider)
 
 	r := gin.Default()
 	r.Use(middleware.Recover(appCtx))
@@ -37,6 +49,13 @@ func runService(db *gorm.DB) error {
 			"message": "pong",
 		})
 	})
+
+	images := r.Group("/images")
+	{
+		images.GET("", ginimage.ListImage(appCtx))
+		images.POST("", ginimage.UploadImage(appCtx))
+		images.DELETE("/:id", ginimage.DeleteImage(appCtx))
+	}
 
 	restaurants := r.Group("/restaurants")
 	{

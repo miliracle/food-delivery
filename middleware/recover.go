@@ -13,7 +13,7 @@ func Recover(ac component.AppContext) gin.HandlerFunc {
 			if err := recover(); err != nil {
 				c.Header("Content-Type", "application/json")
 
-				if appErr, ok := err.(common.AppError); ok {
+				if appErr, ok := err.(*common.AppError); ok {
 					c.AbortWithStatusJSON(appErr.StatusCode, appErr)
 					// panic(err)
 					return
