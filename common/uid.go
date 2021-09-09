@@ -109,16 +109,43 @@ func (uid *UID) Value() (driver.Value, error) {
 	return int64(uid.LocalID), nil
 }
 
-// func (uid *UID) Scan(value interface{}) error {
-// 	if value == nil {
-// 		return nil
-// 	}
+func (uid *UID) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
 
-// 	var i uint32
-// 	switch t := value.(type) {
-// 	default:
-// 		i = uint32(t)
-// 	}
+	var i uint32
 
-// 	return nil
-// }
+	switch t := value.(type) {
+	case int:
+		i = uint32(t)
+	case int8:
+		i = uint32(t) // standardizes across systems
+	case int16:
+		i = uint32(t) // standardizes across systems
+	case int32:
+		i = uint32(t) // standardizes across systems
+	case int64:
+		i = uint32(t) // standardizes across systems
+	case uint8:
+		i = uint32(t) // standardizes across systems
+	case uint16:
+		i = uint32(t) // standardizes across systems
+	case uint32:
+		i = t
+	case uint64:
+		i = uint32(t)
+	case []byte:
+		a, err := strconv.Atoi(string(t))
+		if err != nil {
+			return err
+		}
+		i = uint32(a)
+	default:
+		return errors.New("invalid Scan Source")
+	}
+
+	*uid = NewUID(i, 0, 1)
+
+	return nil
+}
