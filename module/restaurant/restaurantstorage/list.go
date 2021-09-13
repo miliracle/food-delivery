@@ -31,11 +31,18 @@ func (s *sqlStore) ListDataByCondition(
 		return nil, common.ErrDB(err)
 	}
 
+	if c := paging.FakeCursor; c != "" {
+		if uid, err := common.FromBase58(c); err == nil {
+			db = db.Where("id < ?", uid.GetLocalID())
+		} else {
+			db = db.Offset((paging.Page - 1) * paging.Limit)
+		}
+
+	}
+
 	var result []restaurantmodel.Restaurant
 
-	if err := db.
-		Offset((paging.Page - 1) * paging.Limit).
-		Limit(paging.Limit).
+	if err := db.Limit(paging.Limit).
 		Order("id desc").
 		Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
