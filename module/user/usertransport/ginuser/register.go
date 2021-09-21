@@ -3,6 +3,7 @@ package ginuser
 import (
 	"fooddelivery/common"
 	"fooddelivery/component"
+	"fooddelivery/component/hasher"
 	"fooddelivery/module/user/userbiz"
 	"fooddelivery/module/user/usermodel"
 	"fooddelivery/module/user/userstorage"
