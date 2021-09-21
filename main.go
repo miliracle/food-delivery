@@ -7,6 +7,7 @@ import (
 	"fooddelivery/middleware"
 	"fooddelivery/module/image/imagetransport/ginimage"
 	"fooddelivery/module/restaurant/restauranttransport/ginrestaurent"
+	"fooddelivery/module/user/usertransport/ginuser"
 	"log"
 	"net/http"
 
@@ -49,6 +50,8 @@ func runService(db *gorm.DB, uploadProvider uploadprovider.UploadProvider) error
 			"message": "pong",
 		})
 	})
+
+	r.POST("/register", ginuser.Register(appCtx))
 
 	images := r.Group("/images")
 	{
