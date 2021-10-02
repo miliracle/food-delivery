@@ -34,7 +34,7 @@ func (biz *RegisterBiz) RegisterUser(ctx context.Context, data *usermodel.UserCr
 	}
 
 	if data.Email == "" {
-		return errors.New("email is not empty")
+		return errors.New("email should not empty")
 	}
 	salt := common.GenSalt(50)
 
