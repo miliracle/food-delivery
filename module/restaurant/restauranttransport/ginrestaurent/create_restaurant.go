@@ -2,7 +2,7 @@ package ginrestaurent
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/module/restaurant/restaurantbiz"
 	"fooddelivery/module/restaurant/restaurantmodel"
 	"fooddelivery/module/restaurant/restaurantstorage"
@@ -11,13 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRestaurant(appCtx component.AppContext) gin.HandlerFunc {
+func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data restaurantmodel.RestaurantCreate
 
 		if err := c.ShouldBind(&data); err != nil {
 			panic(common.ErrInvalidRequest(err))
 		}
+
+		requester := c.MustGet(common.CurrentUser).(common.Requester)
+
+		data.OwnerId = requester.GetUserId()
 
 		store := restaurantstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		biz := restaurantbiz.NewCreateRestaurantBiz(store)

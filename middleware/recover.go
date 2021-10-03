@@ -2,12 +2,12 @@ package middleware
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Recover(ac component.AppContext) gin.HandlerFunc {
+func Recover(ac appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {

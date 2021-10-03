@@ -21,3 +21,4 @@ services:
     volumes:
       - ${VOLUME_PATH}/data:/bitnami/mysql/data
       - ${VOLUME_PATH}/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+      - ./database:/docker-entrypoint-initdb.d
