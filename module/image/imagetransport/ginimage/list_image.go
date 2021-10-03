@@ -2,7 +2,7 @@ package ginimage
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/module/image/imagebiz"
 	"fooddelivery/module/image/imagestorage"
 	"net/http"
@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ListImage(appCtx component.AppContext) gin.HandlerFunc {
+func ListImage(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ids []int
 

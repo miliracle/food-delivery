@@ -2,7 +2,7 @@ package ginrestaurent
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/module/restaurant/restaurantbiz"
 	"fooddelivery/module/restaurant/restaurantstorage"
 	"net/http"
@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteRestaurant(appCtx component.AppContext) gin.HandlerFunc {
+func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, err := common.FromBase58(c.Param("id"))
 

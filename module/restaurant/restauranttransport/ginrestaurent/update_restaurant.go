@@ -2,7 +2,7 @@ package ginrestaurent
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/module/restaurant/restaurantbiz"
 	"fooddelivery/module/restaurant/restaurantmodel"
 	"fooddelivery/module/restaurant/restaurantstorage"
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateRestaurant(appCtx component.AppContext) gin.HandlerFunc {
+func UpdateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, err := common.FromBase58(c.Param("id"))
 

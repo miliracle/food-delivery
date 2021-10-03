@@ -2,6 +2,7 @@ package common
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/spf13/viper"
 )
@@ -13,6 +14,9 @@ type Config struct {
 	GOOGLE_APPLICATION_CREDENTIALS   string
 	GOOGLE_CLOUD_STORAGE_BUCKET_NAME string
 	GOOGLE_CDN                       string
+	SECRET_KEY                       string
+	ACCESS_TOKEN_EXPIRE_TIME         int
+	REFRESH_TOKEN_EXPIRE_TIME        int
 }
 
 var CONFIG Config = Config{
@@ -22,6 +26,9 @@ var CONFIG Config = Config{
 	GOOGLE_APPLICATION_CREDENTIALS:   viperEnvVariable("GOOGLE_APPLICATION_CREDENTIALS"),
 	GOOGLE_CLOUD_STORAGE_BUCKET_NAME: viperEnvVariable("GOOGLE_CLOUD_STORAGE_BUCKET_NAME"),
 	GOOGLE_CDN:                       viperEnvVariable("GOOGLE_CDN"),
+	SECRET_KEY:                       viperEnvVariable("SECRET_KEY"),
+	ACCESS_TOKEN_EXPIRE_TIME:         viperEnvVariableInt("ACCESS_TOKEN_EXPIRE_TIME"),
+	REFRESH_TOKEN_EXPIRE_TIME:        viperEnvVariableInt("REFRESH_TOKEN_EXPIRE_TIME_KEY"),
 }
 
 func viperEnvVariable(key string) string {
@@ -47,8 +54,19 @@ func viperEnvVariable(key string) string {
 	// If the type is a string then ok will be true
 	// ok will make sure the program not break
 	if !ok {
-		log.Fatalf("Invalid type assertion")
+		log.Fatalf("%s: Invalid type assertion", key)
 	}
 
 	return value
+}
+
+func viperEnvVariableInt(key string) int {
+	value := viperEnvVariable(key)
+
+	i, err := strconv.Atoi(value)
+	if err != nil {
+		log.Fatalf("Error while reading config file %s", err)
+
+	}
+	return i
 }

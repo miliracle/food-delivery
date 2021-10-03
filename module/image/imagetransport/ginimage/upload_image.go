@@ -3,7 +3,7 @@ package ginimage
 import (
 	"fmt"
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/module/image/imagebiz"
 	"fooddelivery/module/image/imagestorage"
 	"io"
@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UploadImage(appCtx component.AppContext) func(*gin.Context) {
+func UploadImage(appCtx appctx.AppContext) func(*gin.Context) {
 	return func(c *gin.Context) {
 		multipart, err := c.Request.MultipartReader()
 

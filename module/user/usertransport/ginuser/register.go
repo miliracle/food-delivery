@@ -2,7 +2,7 @@ package ginuser
 
 import (
 	"fooddelivery/common"
-	"fooddelivery/component"
+	"fooddelivery/component/appctx"
 	"fooddelivery/component/hasher"
 	"fooddelivery/module/user/userbiz"
 	"fooddelivery/module/user/usermodel"
@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(appctx component.AppContext) func(*gin.Context) {
+func Register(appctx appctx.AppContext) func(*gin.Context) {
 	return func(c *gin.Context) {
 
 		var data usermodel.UserCreate
@@ -34,7 +34,7 @@ func Register(appctx component.AppContext) func(*gin.Context) {
 
 		data.Mask(false)
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.FakeId.String()))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 
 	}
 }

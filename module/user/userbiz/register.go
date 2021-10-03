@@ -9,7 +9,7 @@ import (
 )
 
 type RegisterStorage interface {
-	FindDataWithCondition(ctx context.Context, conditions map[string]interface{}, moreInfo ...string) (*usermodel.User, error)
+	FindUser(ctx context.Context, conditions map[string]interface{}, moreInfo ...string) (*usermodel.User, error)
 	CreateUser(context context.Context, data *usermodel.UserCreate) error
 }
 
@@ -27,14 +27,13 @@ func NewRegisterBiz(store RegisterStorage, hasher Hasher) *RegisterBiz {
 }
 
 func (biz *RegisterBiz) RegisterUser(ctx context.Context, data *usermodel.UserCreate) error {
-
-	userFound, _ := biz.store.FindDataWithCondition(ctx, map[string]interface{}{"email": data.Email})
-	if userFound != nil {
-		return usermodel.ErrEmailExisted
-	}
-
 	if data.Email == "" {
 		return errors.New("email should not empty")
+	}
+
+	userFound, _ := biz.store.FindUser(ctx, map[string]interface{}{"email": data.Email})
+	if userFound != nil {
+		return usermodel.ErrEmailExisted
 	}
 	salt := common.GenSalt(50)
 
