@@ -31,6 +31,10 @@ func (s *sqlStore) ListDataByCondition(
 		return nil, common.ErrDB(err)
 	}
 
+	for i := range moreKeys {
+		db = db.Preload(moreKeys[i])
+	}
+
 	if c := paging.FakeCursor; c != "" {
 		if uid, err := common.FromBase58(c); err == nil {
 			db = db.Where("id < ?", uid.GetLocalID())
